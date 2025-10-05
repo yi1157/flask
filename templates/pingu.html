@@ -1,0 +1,20 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flask 範例</title>
+</head>
+<body>
+    {% if user %}
+    <h1>
+        Hi {{user}}
+    </h1>
+    {% endif %}
+
+    <ul>
+    {% for drink in item %}
+        <li>{{ drink }}</li>
+    {% endfor %}
+    </ul>
+</body>
+</html>
