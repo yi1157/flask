@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>金額轉換</title>
+  <style>
+    body { font-family: Arial, "Microsoft JhengHei", sans-serif; margin: 2rem; }
+    form { max-width: 400px; padding: 1rem; border: 1px solid #ccc; border-radius: 8px; }
+    label { display: block; margin-top: 1rem; }
+    input, select, button { width: 100%; padding: 0.5rem; margin-top: 0.5rem; }
+    button { background-color: #0366d6; color: white; border: none; cursor: pointer; }
+    button:hover { background-color: #0254ad; }
+    .result { margin-top: 1.5rem; font-size: 1.2rem; font-weight: bold; }
+    .error { margin-top: 1rem; color: red; }
+    a { display: inline-block; margin-top: 1rem; color: #0366d6; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <h1>USD 金額轉換</h1>
+  <form method="post" action="{{ url_for('money') }}">
+    <label for="usd">請輸入美金 (USD)：</label>
+    <input type="number" id="usd" name="usd" step="0.01" min="0"
+           value="{{ usd if usd is not none else '' }}" required>
+
+    <label for="currency">選擇要轉換的幣別：</label>
+    <select id="currency" name="currency" required>
+      <option value="" disabled selected>請選擇</option>
+      {% for code, rate in rates.items() %}
+        <option value="{{ code }}" {% if target == code %}selected{% endif %}>
+          {{ code }}（率：{{ "%.4f"|format(rate) }}）
+        </option>
+      {% endfor %}
+    </select>
+
+    <button type="submit">換算</button>
+
+    {% if error %}
+      <div class="error">{{ error }}</div>
+    {% endif %}
+
+    {% if result is not none %}
+      <div class="result">
+        {{ usd }} USD = {{ "{:,.2f}".format(result) }} {{ target }}
+      </div>
+    {% endif %}
+  </form>
+
+  <a href="{{ url_for('home') }}">← 回首頁</a>
+</body>
+</html>
